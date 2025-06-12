@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo do Soroban</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- menu lateral -->
+    <div class="menu">
+      <h2>MODOS DE JOGO</h2>
+      <button onclick="ativarModoBasico()">modo básico</button>
+      <button onclick="abrirModoExpressoes()">modo expressão</button>
+
+      <div id="opcoesExpressoes" style="display: none;" class="opcoes">
+        <h3>operações:</h3>
+        <label><input type="checkbox" value="+"> + adição</label><br>
+        <label><input type="checkbox" value="-"> - subtração</label><br>
+        <label><input type="checkbox" value="*"> * multiplicação</label><br>
+        <label><input type="checkbox" value="/"> / divisão</label><br>
+        <button id="botaoGerarExpressao" onclick="iniciarModoExpressao()">gerar expressão</button>
+      </div>
+    </div>
+
+    <!-- Área Principal -->
+    <div class="principal">
+      <h1>SOROBAN GAME</h1>
+
+      <div id="target"><span id="labelNumeroAlvo">numero alvo:</span> <span id="randomNumber">---</span></div>
+      <div id="cronometro">Tempo: --</div>
+      <div id="avisoTempo" style="color: red; font-weight: bold; margin-top: 10px;"></div>
+
+
+      <div id="expressao" style="display: none;">
+        expressão: <span id="expTexto"></span>
+      </div>
+
+      <!-- soroban -->
+      <div class="soroban modo-basico" id="soroban">
+        <!-- colunas -->
+        <div class="coluna" data-multiplicador="1000">
+          <button class="cima" data-valor="5"></button>
+          <div class="barra"></div>
+          <div class="baixo-container">
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+          </div>
+        </div>
+        <div class="coluna" data-multiplicador="100">
+          <button class="cima" data-valor="5"></button>
+          <div class="barra"></div>
+          <div class="baixo-container">
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+          </div>
+        </div>
+        <div class="coluna" data-multiplicador="10">
+          <button class="cima" data-valor="5"></button>
+          <div class="barra"></div>
+          <div class="baixo-container">
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+          </div>
+        </div>
+        <div class="coluna" data-multiplicador="1">
+          <button class="cima" data-valor="5"></button>
+          <div class="barra"></div>
+          <div class="baixo-container">
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+            <button class="baixo" data-valor="1"></button>
+          </div>
+        </div>
+      </div>
+
+      <button onclick="verificarValor()">verificar</button>
+
+      <div id="resultado" style="margin-top: 10px;"></div>
+
+      <div id="revelarResultado" style="display: none;">
+        <button onclick="mostrarResultado()">revelar resultado</button>
+      </div>
+
+      <div id="pontosAtuais">pontos: 0</div>
+      <div id="recordeBasico">recorde (modo basico): 0</div>
+      <div id="recordeExpressao">eecorde (modo expressão): 0</div>
+    </div>
+  </div>
+
+  <!-- pop-up -->
+  <div id="popupModo" class="popup">
+    <div class="popup-conteudo">
+      <span class="fechar" onclick="fecharPopupModo()">&times;</span>
+      <h2>modo selecionado</h2>
+      <p id="mensagemModo"></p>
+      <div class="popup-dificuldade">
+        <h3>escolha a dificuldade</h3>
+        <button onclick="selecionarDificuldade('facil')">fácil</button>
+        <button onclick="selecionarDificuldade('medio')">médio</button>
+        <button onclick="selecionarDificuldade('dificil')">difícil</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
