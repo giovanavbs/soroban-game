@@ -343,6 +343,8 @@ function fecharPopupModo() {
 
 function selecionarDificuldade(nivel) {
   dificuldadeAtual = nivel;
+  vidasAtuais = dificuldadeMaxVidas();
+  atualizarCoracoes();
   fecharPopupModo();
   if (modoAtual === 'basico') {
     gerarNumero();
@@ -350,6 +352,7 @@ function selecionarDificuldade(nivel) {
     document.getElementById("opcoesExpressoes").style.display = "block";
   }
 }
+
 
 function iniciarTimer() {
   clearInterval(timerInterval);
@@ -362,20 +365,26 @@ function iniciarTimer() {
 
     if (tempoRestante <= 0) {
       clearInterval(timerInterval);
-      document.getElementById("avisoTempo").innerText = "tempo esgotado!"; // o tempo n esgota mais ja q coloquei atualização dinamica da expressao/numero ao encerrar mas pode ser util no futuro entao deixei a condição anyway
-      pontos = 0;
-      atualizarPontuacao();
-      resetarSoroban();
-      limparFeedback();
+      document.getElementById("avisoTempo").innerText = "tempo esgotado!"; // o tempo n esgota mais pq é gerado nova expressao mas deixei no caso de futuras alterações e con trole das vidas
 
-      if (modoAtual === 'basico') {
-        gerarNumero();
-      } else if (modoAtual === 'expressao') {
-        iniciarModoExpressao(true);
+      perderVida(); 
+
+      if (vidasAtuais > 0) {
+        resetarSoroban();
+        limparFeedback();
+
+        if (modoAtual === 'basico') {
+          gerarNumero();
+        } else if (modoAtual === 'expressao') {
+          iniciarModoExpressao(true);
+        }
+
+        iniciarTimer(); 
       }
     }
   }, 1000);
 }
+
 
 function atualizarCronometro() {
   document.getElementById("cronometro").innerText = `Tempo: ${tempoRestante}s`;
@@ -486,4 +495,87 @@ function fecharTutorial() {
   tutorialContainer.style.display = "none";
   document.querySelectorAll(".destaque").forEach(el => el.classList.remove("destaque"));
   btnTutorial.focus();
+}
+
+// vidas
+let vidasAtuais = 0;
+let intervalo;
+const coracoesContainer = document.createElement('div');
+coracoesContainer.id = 'coracoes';
+document.querySelector('.principal').insertBefore(coracoesContainer, document.getElementById('target'));
+
+/*function atualizarCoracoes() {
+  coracoesContainer.innerHTML = '';
+  for (let i = 0; i < dificuldadeMaxVidas(); i++) {
+    const coracao = document.createElement('span');
+    coracao.classList.add('coracao');
+    if (i < vidasAtuais) {
+      coracao.classList.add('cheio');
+    } else {
+      coracao.classList.add('vazio');
+    }
+    coracoesContainer.appendChild(coracao);
+  }
+}*/
+function atualizarCoracoes() {
+  coracoesContainer.innerHTML = '';
+  
+  if (vidasAtuais > 0) {
+    for (let i = 0; i < dificuldadeMaxVidas(); i++) {
+      const coracao = document.createElement('span');
+      coracao.classList.add('coracao');
+      if (i < vidasAtuais) {
+        coracao.classList.add('cheio');
+      } else {
+        coracao.classList.add('vazio');
+      }
+      coracoesContainer.appendChild(coracao);
+    }
+  } else {
+    coracoesContainer.textContent = 'nao possui mais vidas.';
+  }
+}
+
+
+function dificuldadeMaxVidas() {
+  switch (dificuldadeAtual) {
+    case 'facil': return 5;
+    case 'medio': return 3;
+    case 'dificil': return 2;
+    default: return 5;
+  }
+}
+
+function perderVida() {
+  vidasAtuais--;
+  atualizarCoracoes();
+  if (vidasAtuais <= 0) {
+    exibirGameOver();
+  }
+}
+
+function exibirGameOver() {
+  clearInterval(intervalo);
+  alert('game over! escolha uma dificuldade para tentar novamente.');
+  mostrarPopupModo();
+}
+
+function selecionarDificuldade(nivel) {
+  dificuldadeAtual = nivel;
+  vidasAtuais = dificuldadeMaxVidas();
+  atualizarCoracoes();
+  fecharPopupModo();
+  iniciarModoSelecionado();
+}
+
+function cronometroAcabou() {
+  perderVida();
+  if (vidasAtuais > 0) {
+    if (modoAtual === 'basico') {
+      gerarNovoNumero();
+    } else if (modoAtual === 'expressao') {
+      gerarExpressao();
+    }
+    reiniciarTempo();
+  }
 }
