@@ -18,10 +18,15 @@ function gerarNumero() {
     max = 99;
   } else if (dificuldadeAtual === 'dificil') {
     min = 100;
-    max = 9999; 
+    max = 9999;
   }
 
-  numeroAlvo = getRandomInt(min, max);
+  let novoNumero;
+  do {
+    novoNumero = getRandomInt(min, max);
+  } while (novoNumero === numeroAlvo);
+
+  numeroAlvo = novoNumero;
   document.getElementById("randomNumber").innerText = numeroAlvo;
   document.getElementById("expressao").style.display = "none";
   expressaoMostrada = false;
@@ -32,6 +37,7 @@ function gerarNumero() {
   iniciarTimer();
 }
 
+
 // chamados ao inicializar o jogo
 gerarNumero();
 mostrarPopupModo(); 
@@ -39,6 +45,7 @@ mostrarPopupModo();
 document.querySelectorAll('.cima').forEach(btn => {
   btn.addEventListener('click', () => {
     btn.classList.toggle('ativa');
+    atualizarValorAtual();
   });
 });
 
@@ -59,6 +66,8 @@ document.querySelectorAll('.baixo-container').forEach(container => {
           botoes[i].classList.remove('ativa');
         }
       }
+
+      atualizarValorAtual();
     });
   });
 });
@@ -256,7 +265,12 @@ function iniciarModoExpressao(automatica = false) {
     (op === '-' && a - b < 0)
   );
 
+  if (resultado === numeroAlvo && tentativa < 20) {
+      iniciarModoExpressao(automatica);
+      return;
+  }
   numeroAlvo = resultado;
+
   const expressao = `${a} ${op} ${b}`;
 
   document.getElementById("expTexto").innerText = expressao;
@@ -306,6 +320,7 @@ function mostrarResultado() {
 function resetarSoroban() {
   document.querySelectorAll('.cima').forEach(btn => btn.classList.remove('ativa'));
   document.querySelectorAll('.baixo').forEach(btn => btn.classList.remove('ativa'));
+  atualizarValorAtual();
 }
 
 function mostrarPopupModo() {
@@ -365,4 +380,110 @@ function iniciarTimer() {
 function atualizarCronometro() {
   document.getElementById("cronometro").innerText = `Tempo: ${tempoRestante}s`;
   document.getElementById("avisoTempo").innerText = ""; 
+}
+
+//valor atual interagindo com as bolinhas que o jogador clica
+function atualizarValorAtual() {
+  const valor = calcularValorSoroban();
+  document.getElementById('valorAtual').innerText = `valor atual: ${valor}`;
+}
+
+//tutorial
+const btnTutorial = document.getElementById('btnTutorial');
+const tutorialContainer = document.getElementById('tutorialContainer');
+const tutorialTexto = document.getElementById('tutorialTexto');
+const btnTutorialVoltar = document.getElementById('btnTutorialVoltar');
+const btnTutorialProximo = document.getElementById('btnTutorialProximo');
+const btnTutorialSair = document.getElementById('btnTutorialSair');
+
+btnTutorial.addEventListener('click', iniciarTutorial);
+btnTutorialVoltar.addEventListener('click', etapaAnteriorTutorial);
+btnTutorialProximo.addEventListener('click', proximaEtapaTutorial);
+btnTutorialSair.addEventListener('click', fecharTutorial);
+
+const etapasTutorial = [
+  {
+    texto: "bem-vindo ao jogo do soroban! vamos aprender a jogar passo a passo.",
+  },
+  {
+    texto: "este é o número que você precisa montar no ábaco.",
+    destaque: "#randomNumber"
+  },
+  {
+    texto: "essas bolinhas acima são as superiores (valem 5). clique para ativá-las.",
+    destaque: ".cima"
+  },
+  {
+    texto: "essas abaixo valem 1. clique e veja como somam o total da coluna.",
+    destaque: ".baixo"
+  },
+  {
+    texto: "cada coluna representa uma casa decimal: unidade, dezena, centena...",
+    destaque: ".coluna[data-multiplicador='1']"
+  },
+  {
+    texto: "use as bolinhas para montar o número exibido e clique em 'verificar'.",
+    destaque: "#botaoVerificar"
+  },
+  {
+    texto: "agora, explore o modo de expressões para resolver cálculos!",
+    destaque: "#expTexto"
+  },
+  {
+    texto: "isso é tudo! boa sorte e divirta-se com o soroban!"
+  }
+];
+
+let etapaAtual = 0;
+
+function iniciarTutorial() {
+  etapaAtual = 0;
+  tutorialContainer.style.display = "block";
+  mostrarEtapaTutorial();
+  btnTutorialVoltar.disabled = true;
+  btnTutorialVoltar.setAttribute('aria-disabled', 'true');
+}
+
+function mostrarEtapaTutorial() {
+  const etapa = etapasTutorial[etapaAtual];
+  tutorialTexto.innerText = etapa.texto;
+
+  // remove destaques anteriores
+  document.querySelectorAll(".destaque").forEach(el => {
+    el.classList.remove("destaque");
+  });
+
+  // adiciona destaque na etapa atual
+  if (etapa.destaque) {
+    document.querySelectorAll(etapa.destaque).forEach(el => {
+      el.classList.add("destaque");
+      el.scrollIntoView({behavior: "smooth", block: "center"});
+    });
+  }
+
+  // controlar botões
+  btnTutorialVoltar.disabled = etapaAtual === 0;
+  btnTutorialVoltar.setAttribute('aria-disabled', etapaAtual === 0 ? 'true' : 'false');
+  btnTutorialProximo.disabled = etapaAtual === etapasTutorial.length - 1;
+  btnTutorialProximo.setAttribute('aria-disabled', etapaAtual === etapasTutorial.length - 1 ? 'true' : 'false');
+}
+
+function proximaEtapaTutorial() {
+  if (etapaAtual < etapasTutorial.length - 1) {
+    etapaAtual++;
+    mostrarEtapaTutorial();
+  }
+}
+
+function etapaAnteriorTutorial() {
+  if (etapaAtual > 0) {
+    etapaAtual--;
+    mostrarEtapaTutorial();
+  }
+}
+
+function fecharTutorial() {
+  tutorialContainer.style.display = "none";
+  document.querySelectorAll(".destaque").forEach(el => el.classList.remove("destaque"));
+  btnTutorial.focus();
 }

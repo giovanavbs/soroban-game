@@ -13,6 +13,7 @@
       <h2>MODOS DE JOGO</h2>
       <button onclick="ativarModoBasico()">modo básico</button>
       <button onclick="abrirModoExpressoes()">modo expressão</button>
+      <button type="button" id="btnTutorial">tutorial</button>
 
       <div id="opcoesExpressoes" style="display: none;" class="opcoes">
         <h3>operações:</h3>
@@ -82,7 +83,9 @@
         </div>
       </div>
 
-      <button onclick="verificarValor()">verificar</button>
+      <div id="valorAtual" class="valor">valor atual: 0</div>
+
+      <button id="botaoVerificar" onclick="verificarValor()">verificar</button>
 
       <div id="resultado" style="margin-top: 10px;"></div>
 
@@ -92,7 +95,7 @@
 
       <div id="pontosAtuais">pontos: 0</div>
       <div id="recordeBasico">recorde (modo basico): 0</div>
-      <div id="recordeExpressao">eecorde (modo expressão): 0</div>
+      <div id="recordeExpressao">recorde (modo expressão): 0</div>
     </div>
   </div>
 
@@ -111,6 +114,15 @@
     </div>
   </div>
 
+  <div id="tutorialContainer" class="tutorial" style="display: none;" role="region" aria-label="Tutorial do jogo">
+    <div id="tutorialTexto"></div>
+    <div class="botoes-tutorial">
+      <button type="button" id="btnTutorialVoltar" aria-label="Voltar etapa do tutorial">⬅ voltar</button>
+      <button type="button" id="btnTutorialProximo" aria-label="Próxima etapa do tutorial">próximo ➡</button>
+      <button type="button" id="btnTutorialSair" aria-label="Sair do tutorial">sair ✖</button>
+    </div>
+  </div>
+  
   <script src="script.js"></script>
 </body>
 </html>
