@@ -222,13 +222,15 @@ button {
   100% { outline-offset: 0px; }
 }
 #valorAtual {
+  width: 10%;
   font-size: 1rem;
-  color: #facc15; /* amarelo */
-  background-color: #1f2937; /* cinza escuro */
+  color: #facc15; 
+  background-color: #1f2937; 
   padding: 5px 10px;
   border-radius: 8px;
-  display: inline-block;
-  margin-top: 1rem;
+  display: block;           
+  margin: 1rem auto 1rem;      
+  text-align: center; 
   transition: all 0.3s ease-in-out;
 }
 /*

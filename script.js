@@ -39,7 +39,6 @@ function gerarNumero() {
 
 
 // chamados ao inicializar o jogo
-gerarNumero();
 mostrarPopupModo(); 
 
 document.querySelectorAll('.cima').forEach(btn => {
@@ -391,11 +390,19 @@ function atualizarCronometro() {
   document.getElementById("avisoTempo").innerText = ""; 
 }
 
-//valor atual interagindo com as bolinhas que o jogador clica
+//valor atual interagindo com as bolinhas que o jogador clica, no modo
 function atualizarValorAtual() {
-  const valor = calcularValorSoroban();
-  document.getElementById('valorAtual').innerText = `valor atual: ${valor}`;
+  const valorAtualDiv = document.getElementById('valorAtual');
+  
+  if (dificuldadeAtual === 'facil') {
+    const valor = calcularValorSoroban();
+    valorAtualDiv.innerText = `valor atual: ${valor}`;
+    valorAtualDiv.style.display = "block";
+  } else {
+    valorAtualDiv.style.display = "none";
+  }
 }
+
 
 //tutorial
 const btnTutorial = document.getElementById('btnTutorial');
@@ -558,6 +565,14 @@ function exibirGameOver() {
   clearInterval(intervalo);
   alert('game over! escolha uma dificuldade para tentar novamente.');
   mostrarPopupModo();
+}
+
+function iniciarModoSelecionado() {
+  if (modoAtual === 'basico') {
+    gerarNumero();
+  } else if (modoAtual === 'expressao') {
+    document.getElementById("opcoesExpressoes").style.display = "block";
+  }
 }
 
 function selecionarDificuldade(nivel) {
