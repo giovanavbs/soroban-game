@@ -148,7 +148,7 @@ function verificarValor() {
       }
     }, 1500);
   } else {
-    resultado.innerText = `errado! vece colocou: ${valorSoroban}`;
+    resultado.innerText = `errado! voce colocou: ${valorSoroban}`;
     resultado.style.color = "red";
   }
 }
