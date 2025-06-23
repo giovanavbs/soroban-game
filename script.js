@@ -393,8 +393,9 @@ function atualizarCronometro() {
 //valor atual interagindo com as bolinhas que o jogador clica, no modo
 function atualizarValorAtual() {
   const valorAtualDiv = document.getElementById('valorAtual');
-  
-  if (dificuldadeAtual === 'facil') {
+
+  // so mostra se estiver no modo basico e na dificuldade facil
+  if (modoAtual === 'basico' && dificuldadeAtual === 'facil') {
     const valor = calcularValorSoroban();
     valorAtualDiv.innerText = `valor atual: ${valor}`;
     valorAtualDiv.style.display = "block";

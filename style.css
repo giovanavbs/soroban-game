@@ -138,6 +138,15 @@ button.verificar{
   border-radius: 5px;
 }
 
+#revelarResultado button {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #333;
+  color: #f5f5f5;
+  border: none;
+  border-radius: 5px;
+}
+
 /* popup dificuldade */
 .popup {
   display: none;
